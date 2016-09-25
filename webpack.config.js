@@ -2,7 +2,6 @@ var path              = require( 'path' );
 var webpack           = require( 'webpack' );
 var merge             = require( 'webpack-merge' );
 var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
-var autoprefixer      = require( 'autoprefixer' );
 var ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 var CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 
@@ -10,6 +9,7 @@ console.log( 'WEBPACK GO!');
 
 // detemine build env
 var TARGET_ENV = process.env.npm_lifecycle_event === 'build' ? 'production' : 'development';
+const isProduction = TARGET_ENV === 'production';
 
 // common webpack config
 var commonConfig = {
@@ -42,24 +42,42 @@ var commonConfig = {
     })
   ],
 
-  postcss: [ autoprefixer( { browsers: ['last 2 versions'] } ) ],
+  postcss: function postcssInit(webpackInstance) {
+    const plugins = [
+      require('postcss-import')({
+        addDependencyTo: webpackInstance,
+      }),
+      require('postcss-mixins'),
+      require('postcss-cssnext'),
+      require('postcss-nested'),
+    ];
+    const prodOnlyPlugins = [
+      require('cssnano')({
+        safe: true,
+        autoprefixer: false,
+        sourcemap: true,
+      }),
+    ];
 
-}
+    return isProduction ? plugins.concat(prodOnlyPlugins) : plugins;
+  },
+};
 
 // additional webpack settings for local env (when invoked by 'npm start')
-if ( TARGET_ENV === 'development' ) {
+if ( !isProduction ) {
   console.log( 'Serving locally...');
 
   module.exports = merge( commonConfig, {
 
     entry: [
-      'webpack-dev-server/client?http://localhost:8080',
+      'webpack-dev-server/client?http://localhost:8090',
       path.join( __dirname, 'src/static/index.js' )
     ],
 
     devServer: {
       inline:   true,
-      progress: true
+      progress: true,
+      port: 8090,
     },
 
     module: {
@@ -70,22 +88,17 @@ if ( TARGET_ENV === 'development' ) {
           loader:  'elm-hot!elm-webpack?verbose=true&warn=true'
         },
         {
-          test: /\.(css|scss)$/,
+          test: /\.css$/,
           loaders: [
             'style-loader',
             'css-loader',
             'postcss-loader',
-            'sass-loader'
           ]
         }
       ]
     }
-
   });
-}
-
-// additional webpack settings for prod env (when invoked via 'npm run build')
-if ( TARGET_ENV === 'production' ) {
+} else if ( isProduction ) {
   console.log( 'Building for prod...');
 
   module.exports = merge( commonConfig, {
@@ -100,11 +113,10 @@ if ( TARGET_ENV === 'production' ) {
           loader:  'elm-webpack'
         },
         {
-          test: /\.(css|scss)$/,
+          test: /\.css$/,
           loader: ExtractTextPlugin.extract( 'style-loader', [
             'css-loader',
             'postcss-loader',
-            'sass-loader'
           ])
         }
       ]
@@ -113,8 +125,8 @@ if ( TARGET_ENV === 'production' ) {
     plugins: [
       new CopyWebpackPlugin([
         {
-          from: 'src/static/img/',
-          to:   'static/img/'
+          from: 'src/static/images/',
+          to:   'static/images/'
         },
         {
           from: 'src/favicon.ico'
