@@ -1,4 +1,4 @@
-module Clock.View exposing (clock)
+module View.Clock exposing (clock)
 
 import Html.Attributes exposing (class)
 import Date exposing (Date, fromTime)

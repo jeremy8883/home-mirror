@@ -1,7 +1,7 @@
 import Html.App
 
 import Clock.State exposing (init, update, subscriptions)
-import Root.View exposing (view)
+import View exposing (view)
 
 main =
   Html.App.program

@@ -1,10 +1,9 @@
-module Root.View exposing (..)
+module View exposing (view)
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, div)
 
 import Models exposing (ClockModel)
-import Clock.View exposing (clock)
+import View.Clock exposing (clock)
 import Messages exposing (Clock)
 
 view : ClockModel -> Html Clock
