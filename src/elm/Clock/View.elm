@@ -1,0 +1,27 @@
+module Clock.View exposing (clock)
+
+import Html.Attributes exposing (class)
+import Date exposing (Date, fromTime)
+import Html exposing (Html, div, text)
+import Time exposing (Time, second)
+import String exposing (pad)
+
+import Clock.State exposing (Msg)
+import Clock.Types exposing(Model)
+
+toTimeString : Date -> String
+toTimeString date =
+  let
+    hours = date |> Date.hour |> toString
+    minutes = date |> Date.minute |> toString |> pad 2 '0'
+  in
+    hours ++ ":" ++ minutes
+
+clock : Model -> Html Msg
+clock model =
+  let
+    date = fromTime model
+  in
+    div [ class "clock" ][
+      text ( toTimeString date )
+    ]
