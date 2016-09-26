@@ -1,6 +1,9 @@
-module Messages exposing (..)
+module Messages exposing (Message(..), ClockMessage(..))
 
 import Time exposing (Time)
 
-type Clock
-  = Tick Time
+type Message
+  = ClockMessage' ClockMessage
+
+type ClockMessage
+  = ClockTick Time

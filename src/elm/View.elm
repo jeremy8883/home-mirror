@@ -2,10 +2,10 @@ module View exposing (view)
 
 import Html exposing (Html, div)
 
-import Models exposing (ClockModel)
+import Models exposing (Model)
 import View.Clock exposing (clock)
-import Messages exposing (Clock)
+import Messages exposing (Message)
 
-view : ClockModel -> Html Clock
+view : Model -> Html Message
 view model =
-  div [] [ clock model ]
+  div [] [ clock model.clock ]

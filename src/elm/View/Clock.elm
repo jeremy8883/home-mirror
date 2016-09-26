@@ -5,7 +5,7 @@ import Date exposing (Date, fromTime)
 import Html exposing (Html, div, text)
 import String exposing (pad)
 
-import Messages exposing (Clock)
+import Messages exposing (Message)
 import Models exposing (ClockModel)
 
 toTimeString : Date -> String
@@ -16,7 +16,7 @@ toTimeString date =
   in
     hours ++ ":" ++ minutes
 
-clock : ClockModel -> Html Clock
+clock : ClockModel -> Html Message
 clock model =
   let
     date = fromTime model
