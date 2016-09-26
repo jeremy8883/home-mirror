@@ -1,19 +1,16 @@
-module Clock.State exposing (init, update, subscriptions, Msg)
+module Clock.State exposing (init, update, subscriptions)
 
 import Time exposing (Time, second)
 import Clock.Types exposing(Model)
+import Messages exposing (Clock(Tick))
 
-init : (Model, Cmd Msg)
+init : (Model, Cmd Clock)
 init =
   (0, Cmd.none)
 
 -- UPDATE
 
-type Msg
-  = Tick Time
-
-
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Messages.Clock -> Model -> (Model, Cmd Clock)
 update msg model =
   case msg of
     Tick newTime ->
@@ -22,6 +19,6 @@ update msg model =
 
 -- SUBSCRIPTIONS
 
-subscriptions : Model -> Sub Msg
+subscriptions : Model -> Sub Clock
 subscriptions model =
   Time.every second Tick
