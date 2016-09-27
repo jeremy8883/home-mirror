@@ -2,18 +2,19 @@ import Html.App
 
 import Clock.State exposing (subscriptions)
 import Messages exposing (Message)
-import Models exposing (Model)
+import Models exposing (ConfigModel, Model)
 import Update exposing (update)
 import View exposing (view)
 
 main =
-  Html.App.program
+  Html.App.programWithFlags
     { init = init
     , view = view
     , update = update
     , subscriptions = subscriptions
     }
 
-init : (Model, Cmd Message)
-init =
-  ({ clock = 0 }, Cmd.none)
+init : ConfigModel -> (Model, Cmd Message)
+init config =
+  ({ clock = 0
+   , config = config }, Cmd.none)

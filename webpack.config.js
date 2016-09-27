@@ -39,6 +39,9 @@ var commonConfig = {
       template: 'src/static/index.html',
       inject:   'body',
       filename: 'index.html'
+    }),
+    new webpack.DefinePlugin({
+      config: JSON.stringify(require('./.private/config.json')),
     })
   ],
 

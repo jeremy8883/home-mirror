@@ -1,6 +1,20 @@
 #  Home Mirror
 
 A smart mirror web application written in elm
+
+Begin by creating `.private/config.json`, and adding:
+
+```
+{
+  "weather": {
+    "darkSkyApiKey": "GET FROM https://darksky.net/dev/",
+    "longitude": <float>,
+    "latitude": <float>
+  }
+}
+
+```
+
 To run:
 ```
 npm run start
