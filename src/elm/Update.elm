@@ -6,18 +6,21 @@ import Models exposing (FetchStatus(Failed, Fetching, Succeeded), Model)
 
 update : Message -> Model -> (Model, Cmd Message)
 update message model =
-  case message of
-    ClockTick newTime ->
-     ({ model | clock = newTime }, Cmd.none)
-    WeatherFetch ->
-      ( { model | weather = { status = Fetching, details = Nothing } }
-      , fetchWeather model.config.weather.darkSkyApiKey model.config.weather.longitude model.config.weather.latitude
-      )
-    WeatherFetchSucceed newWeatherDetails ->
-      ( { model | weather = { status = Succeeded, details = Just newWeatherDetails } }
-      , Cmd.none
-      )
-    WeatherFetchFail _ ->
-      ( { model | weather = { status = Failed, details = Nothing } }
-      , Cmd.none
-      )
+  let
+    weatherConfig = model.config.weather
+  in
+    case message of
+      ClockTick newTime ->
+       ({ model | clock = newTime }, Cmd.none)
+      WeatherFetch _ ->
+        ( { model | weather = { status = Fetching, details = Nothing } }
+        , fetchWeather weatherConfig.darkSkyApiKey weatherConfig.longitude weatherConfig.latitude
+        )
+      WeatherFetchSucceed newWeatherDetails ->
+        ( { model | weather = { status = Succeeded, details = Just newWeatherDetails } }
+        , Cmd.none
+        )
+      WeatherFetchFail _ ->
+        ( { model | weather = { status = Failed, details = Nothing } }
+        , Cmd.none
+        )

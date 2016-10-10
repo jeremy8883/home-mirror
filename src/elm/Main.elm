@@ -1,8 +1,9 @@
+import Api.Weather exposing (fetchWeather)
 import Html.App
 
-import Messages exposing (Message(ClockTick))
+import Messages exposing (Message(ClockTick, WeatherFetch))
 import Models exposing (ConfigModel, Model, FetchStatus(Fetching))
-import Time exposing (second)
+import Time exposing (hour, second)
 import Update exposing (update)
 import View exposing (view)
 
@@ -22,8 +23,14 @@ init config =
      { status = Fetching
      , details = Nothing
      }
-   }, Cmd.none)
+   }, fetchWeather config.weather.darkSkyApiKey config.weather.longitude config.weather.latitude )
 
 subscriptions : Model -> Sub Message
 subscriptions model =
-  Time.every second ClockTick
+  let
+    sixHours = hour * 6
+  in
+    Sub.batch
+      [ Time.every second ClockTick
+      , Time.every sixHours WeatherFetch
+      ]
