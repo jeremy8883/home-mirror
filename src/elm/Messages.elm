@@ -1,9 +1,11 @@
-module Messages exposing (Message(..), ClockMessage(..))
+module Messages exposing (Message(..))
 
+import Http
+import Models exposing (WeatherDetailsModel)
 import Time exposing (Time)
 
 type Message
-  = ClockMessage' ClockMessage
-
-type ClockMessage
   = ClockTick Time
+  | FetchWeather
+  | FetchWeatherSucceed WeatherDetailsModel
+  | FetchWeatherFail Http.Error

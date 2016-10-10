@@ -1,8 +1,8 @@
 import Html.App
 
-import Clock.State exposing (subscriptions)
-import Messages exposing (Message)
-import Models exposing (ConfigModel, Model)
+import Messages exposing (Message(ClockTick))
+import Models exposing (ConfigModel, Model, FetchStatus(Fetching))
+import Time exposing (second)
 import Update exposing (update)
 import View exposing (view)
 
@@ -17,4 +17,13 @@ main =
 init : ConfigModel -> (Model, Cmd Message)
 init config =
   ({ clock = 0
-   , config = config }, Cmd.none)
+   , config = config
+   , weather =
+     { status = Fetching
+     , details = Nothing
+     }
+   }, Cmd.none)
+
+subscriptions : Model -> Sub Message
+subscriptions model =
+  Time.every second ClockTick
