@@ -1,7 +1,7 @@
 module Api.Weather exposing(fetchWeather)
 
 import Http
-import Messages exposing (Message(FetchWeatherFail, FetchWeatherSucceed))
+import Messages exposing (Message(WeatherFetchFail, WeatherFetchSucceed))
 import Models exposing (WeatherDetailsModel, WeatherModel)
 import Task
 import Json.Decode as Decode exposing (Decoder, (:=))
@@ -11,7 +11,7 @@ fetchWeather apiKey longitude latitude =
   let
     url = "https://api.darksky.net/forecast/" ++ apiKey ++ "/" ++ toString(longitude) ++ "," ++ toString(latitude)
   in
-    Task.perform FetchWeatherFail FetchWeatherSucceed (Http.get decodeWeather url)
+    Task.perform WeatherFetchFail WeatherFetchSucceed (Http.get decodeWeather url)
 
 
 decodeWeather : Decoder WeatherDetailsModel

@@ -6,6 +6,6 @@ import Time exposing (Time)
 
 type Message
   = ClockTick Time
-  | FetchWeather
-  | FetchWeatherSucceed WeatherDetailsModel
-  | FetchWeatherFail Http.Error
+  | WeatherFetch
+  | WeatherFetchSucceed WeatherDetailsModel
+  | WeatherFetchFail Http.Error
