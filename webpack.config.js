@@ -81,6 +81,16 @@ if ( !isProduction ) {
       inline:   true,
       progress: true,
       port: 8090,
+      proxy: {
+        '/api/weather/*': {
+          changeOrigin: true,
+          target: 'https://api.darksky.net',
+          secure: true,
+          pathRewrite: {
+            '^/api/weather/': '/',
+          },
+        },
+      },
     },
 
     module: {
