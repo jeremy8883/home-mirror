@@ -1,7 +1,7 @@
 module Utils.Temperature exposing (fahrenheitToCelsius, toDegreesString)
 
 import String exposing (append)
-import Utils.Math exposing (roundBy)
+import Utils.Number exposing (toFixed)
 import Utils.String exposing (appendP)
 
 fahrenheitToCelsius : Float -> Float
@@ -11,6 +11,5 @@ fahrenheitToCelsius f =
 toDegreesString : Float -> String
 toDegreesString deg =
   deg
-  |> roundBy 1
-  |> toString
+  |> toFixed 1
   |> appendP "°"
