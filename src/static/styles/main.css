@@ -3,3 +3,7 @@ html, body {
   color: white;
   font-family: Helvetica, sans-serif;
 }
+
+a {
+  color: #3fd8ff;
+}

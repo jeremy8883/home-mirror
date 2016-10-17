@@ -11,7 +11,7 @@ weather model =
     Fetching ->
       div [] [ text("Fetching weather...") ]
     Failed ->
-      div [] [ text("Failed") ]
+      div [] [ text("Weather fetch failed") ]
     Succeeded ->
       case model.details of
         Nothing ->
