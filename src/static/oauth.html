@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charSet="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home Mirror</title>
+</head>
+<body>
+
+<p>
+  Authenticating...
+</p>
+
+<script>
+(() => {
+  const url = document.URL;
+  const auth = {
+    accessToken: getUrlParam(url, 'access_token'),
+    tokenType: getUrlParam(url, 'token_type'),
+    expiresIn: getUrlParam(url, 'expires_in'),
+  };
+
+  validateToken(auth.accessToken);
+
+  function validateToken(token) {
+    fetch('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + token)
+      .then(() => {
+        save('auth', auth);
+        window.location = '/';
+      });
+  }
+
+  function getUrlParam(url, name) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\#&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    if ( results == null ) return "";
+    else return results[1];
+  }
+
+  function save(key, obj) {
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+})();
+</script>
+
+</body>
+</html>
