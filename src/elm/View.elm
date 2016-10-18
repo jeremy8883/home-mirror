@@ -6,7 +6,14 @@ import Models exposing (Model)
 import View.Clock exposing (clock)
 import View.Weather exposing (weather)
 import Messages exposing (Message)
+import View.Calendar exposing (calendar)
+import View.Settings exposing (settings)
 
 view : Model -> Html Message
 view model =
-  div [] [ clock model.clock, weather model.weather ]
+  div []
+    [ clock model.clock
+    , weather model.weather
+    , calendar model
+    , settings model
+    ]
