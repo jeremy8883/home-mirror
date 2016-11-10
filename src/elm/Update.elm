@@ -3,7 +3,8 @@ module Update exposing (update)
 import Api.Calendar exposing (fetchCalendar)
 import Api.Oauth exposing (fetchUserInfo, logout)
 import Api.Weather exposing (fetchWeather)
-import Messages exposing (Message(CalendarFetch, CalendarFetchFail, CalendarFetchSucceed, ClockTick, OauthFetchUserInfo, OauthFetchUserInfoFail, OauthFetchUserInfoSucceed, OauthLogout, OauthLogoutFail, OauthLogoutSucceed, WeatherFetch, WeatherFetchFail, WeatherFetchSucceed))
+import Date exposing (fromTime)
+import Messages exposing (Message(CalendarFetch, CalendarFetchFail, CalendarFetchSucceed, ClockTick, NoOp, OauthFetchUserInfo, OauthFetchUserInfoFail, OauthFetchUserInfoSucceed, OauthLogout, OauthLogoutFail, OauthLogoutSucceed, WeatherFetch, WeatherFetchFail, WeatherFetchSucceed))
 import Models exposing (FetchStatus(Failed, Fetching, Succeeded), Model)
 import Utils.LocalStorage as LocalStorage
 
@@ -54,12 +55,12 @@ update message model =
         ( model, Cmd.none )
       OauthLogoutFail _ ->
         ( model, Cmd.none )
-      CalendarFetch _ ->
+      CalendarFetch startFrom ->
         ( { model | calendar = { status = Fetching, details = model.calendar.details } }
         , case model.oauth of
-          Nothing -> Cmd.none -- TODO do this in a sequence
+          Nothing -> Cmd.none
           Just oauth ->
-            fetchCalendar model.config.oauth.clientId oauth.accessToken model.config.calendar.name
+            fetchCalendar model.config.oauth.clientId oauth.accessToken model.config.calendar.name (fromTime startFrom)
         )
       CalendarFetchSucceed newCalendarDetails ->
         ( { model | calendar = { status = Succeeded, details = Just newCalendarDetails } }
@@ -69,3 +70,5 @@ update message model =
         ( { model | calendar = { status = Failed, details = Nothing } }
         , Cmd.none
         )
+      NoOp ->
+        (model, Cmd.none)

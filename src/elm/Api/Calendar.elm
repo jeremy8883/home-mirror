@@ -1,18 +1,20 @@
 module Api.Calendar exposing(fetchCalendar)
 
+import Date exposing (Date)
 import Http exposing (defaultSettings, empty, uriEncode)
 import Messages exposing (Message(CalendarFetchFail, CalendarFetchSucceed))
 import Task
 import Json.Decode as Decode exposing (Decoder, (:=))
 import Models exposing (CalendarDetailsModel)
+import Utils.Date exposing (dateToString)
 
-fetchCalendar : String -> String -> String -> Cmd Message
-fetchCalendar clientId accessToken calendarName =
+fetchCalendar : String -> String -> String -> Date -> Cmd Message
+fetchCalendar clientId accessToken calendarName now =
   let
     request =
       { url = "https://www.googleapis.com/calendar/v3/calendars/" ++
           uriEncode calendarName ++
-          "/events?maxResults=50&timeMin=" ++ uriEncode "2016-07-04T10:00:00Z" ++
+          "/events?maxResults=50&timeMin=" ++ (uriEncode <| dateToString now) ++
           "&key=" ++ uriEncode clientId
       , headers = [("Authorization", "Bearer " ++ accessToken)]
       , verb = "GET"

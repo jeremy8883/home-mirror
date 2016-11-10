@@ -1,10 +1,12 @@
 import Api.Calendar exposing (fetchCalendar)
 import Api.Weather exposing (fetchWeather)
 import Api.Oauth exposing (fetchUserInfo)
+import Date
 import Html.App
 
-import Messages exposing (Message(CalendarFetch, ClockTick, WeatherFetch))
+import Messages exposing (Message(CalendarFetch, ClockTick, NoOp, WeatherFetch))
 import Models exposing (ConfigModel, FetchStatus(Fetching), Model, OauthModel)
+import Task
 import Time exposing (hour, minute, second)
 import Update exposing (update)
 import View exposing (view)
@@ -46,7 +48,7 @@ init config = (
       Cmd.batch
       [ fetchWeather config.weather.darkSkyApiKey config.weather.longitude config.weather.latitude
       , fetchUserInfo o.accessToken
-      , fetchCalendar config.oauth.clientId o.accessToken config.calendar.name
+      , Task.perform (\_ -> NoOp) CalendarFetch Time.now
       ]
   )
 

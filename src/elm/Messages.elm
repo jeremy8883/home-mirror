@@ -18,3 +18,4 @@ type Message
   | CalendarFetch Time
   | CalendarFetchSucceed CalendarDetailsModel
   | CalendarFetchFail Http.Error
+  | NoOp
