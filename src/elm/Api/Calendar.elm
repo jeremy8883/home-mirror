@@ -5,7 +5,7 @@ import Http exposing (defaultSettings, empty, uriEncode)
 import Messages exposing (Message(CalendarFetchFail, CalendarFetchSucceed))
 import Task
 import Json.Decode as Decode exposing (Decoder, (:=))
-import Models exposing (CalendarDetailsModel)
+import Models exposing (CalendarDetails)
 import Utils.Date exposing (dateToString)
 
 fetchCalendar : String -> String -> String -> Date -> Cmd Message
@@ -24,8 +24,8 @@ fetchCalendar clientId accessToken calendarName now =
     Http.fromJson decodeCalendar (Http.send defaultSettings request)
     |> Task.perform CalendarFetchFail CalendarFetchSucceed
 
-decodeCalendar : Decoder CalendarDetailsModel
+decodeCalendar : Decoder CalendarDetails
 decodeCalendar =
-  Decode.object2 CalendarDetailsModel
+  Decode.object2 CalendarDetails
     (Decode.at [ "updated" ] Decode.string)
     (Decode.at [ "summary" ] Decode.string)

@@ -5,7 +5,7 @@ import Date
 import Html.App
 
 import Messages exposing (Message(CalendarFetch, ClockTick, NoOp, WeatherFetch))
-import Models exposing (ConfigModel, FetchStatus(Fetching), Model, OauthModel)
+import Models exposing (Config, FetchStatus(Fetching), Root, Oauth)
 import Task
 import Time exposing (hour, minute, second)
 import Update exposing (update)
@@ -20,11 +20,11 @@ main =
     , subscriptions = subscriptions
     }
 
-oauth : Maybe OauthModel
+oauth : Maybe Oauth
 oauth =
   LocalStorage.getOauth
 
-init : ConfigModel -> (Model, Cmd Message)
+init : Config -> (Root, Cmd Message)
 init config = (
   { clock = 0
   , config = config
@@ -52,7 +52,7 @@ init config = (
       ]
   )
 
-subscriptions : Model -> Sub Message
+subscriptions : Root -> Sub Message
 subscriptions model =
   Sub.batch
     [ Time.every second ClockTick

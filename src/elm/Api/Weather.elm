@@ -2,7 +2,7 @@ module Api.Weather exposing(fetchWeather)
 
 import Http
 import Messages exposing (Message(WeatherFetchFail, WeatherFetchSucceed))
-import Models exposing (WeatherDetailsModel, WeatherModel)
+import Models exposing (WeatherDetails, Weather)
 import Task
 import Json.Decode as Decode exposing (Decoder, (:=))
 
@@ -14,7 +14,7 @@ fetchWeather apiKey longitude latitude =
     Task.perform WeatherFetchFail WeatherFetchSucceed (Http.get decodeWeather url)
 
 
-decodeWeather : Decoder WeatherDetailsModel
+decodeWeather : Decoder WeatherDetails
 decodeWeather =
-  Decode.object1 WeatherDetailsModel
+  Decode.object1 WeatherDetails
     (Decode.at [ "currently", "temperature" ] Decode.float)

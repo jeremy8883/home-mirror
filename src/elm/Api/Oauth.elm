@@ -4,7 +4,7 @@ import Http exposing (uriEncode, empty)
 import Messages exposing (Message(OauthFetchUserInfoFail, OauthFetchUserInfoSucceed, OauthLogoutFail, OauthLogoutSucceed))
 import Task
 import Json.Decode as Decode exposing (Decoder, (:=))
-import Models exposing (LogoutResponseModel, UserDetailsModel)
+import Models exposing (LogoutResponse, UserDetails)
 
 fetchUserInfo : String -> Cmd Message
 fetchUserInfo accessToken =
@@ -13,9 +13,9 @@ fetchUserInfo accessToken =
   in
     Task.perform OauthFetchUserInfoFail OauthFetchUserInfoSucceed (Http.get decodeUser url)
 
-decodeUser : Decoder UserDetailsModel
+decodeUser : Decoder UserDetails
 decodeUser =
-  Decode.object2 UserDetailsModel
+  Decode.object2 UserDetails
     (Decode.at [ "name" ] Decode.string)
     (Decode.at [ "email" ] Decode.string)
 
@@ -27,7 +27,7 @@ logout accessToken =
   in
     Task.perform OauthLogoutFail OauthLogoutSucceed (Http.post logoutDecoder url empty)
 
-logoutDecoder : Decoder LogoutResponseModel
+logoutDecoder : Decoder LogoutResponse
 logoutDecoder =
-  Decode.object1 LogoutResponseModel
+  Decode.object1 LogoutResponse
     (Decode.at [ "success" ] Decode.bool)

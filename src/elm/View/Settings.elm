@@ -5,10 +5,10 @@ import Html exposing (Html, a, button, div, text)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Messages exposing (Message(OauthLogout))
-import Models exposing (Model, UserDetailsModel)
+import Models exposing (Root, UserDetails)
 import Selectors.Oauth exposing (getIsAuthorized, getLoginUrl)
 
-settings : Model -> Html Message
+settings : Root -> Html Message
 settings state =
   let
     props =
@@ -28,5 +28,5 @@ settingsChild model =
 
 type alias ViewModel =
   { loginUrl: String
-  , userDetails: Maybe UserDetailsModel
+  , userDetails: Maybe UserDetails
   }

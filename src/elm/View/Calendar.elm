@@ -3,10 +3,10 @@ module View.Calendar exposing (calendar)
 import Html exposing (Html, button, div, text)
 
 import Messages exposing (Message)
-import Models exposing (CalendarDetailsModel, Model)
+import Models exposing (CalendarDetails, Root)
 import Selectors.Oauth exposing (getIsAuthorized)
 
-calendar : Model -> Html Message
+calendar : Root -> Html Message
 calendar state =
   let
     props =
@@ -29,9 +29,9 @@ calendarChild model =
 
 type alias ViewModel =
   { isAuthorized: Bool
-  , details: Maybe CalendarDetailsModel
+  , details: Maybe CalendarDetails
   }
 
-calendarDetails : CalendarDetailsModel -> Html Message
+calendarDetails : CalendarDetails -> Html Message
 calendarDetails calendar =
   div [ ] [ text ("Yes, this is a calendar for " ++ calendar.summary) ]

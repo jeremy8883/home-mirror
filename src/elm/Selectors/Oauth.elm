@@ -1,7 +1,7 @@
 module Selectors.Oauth exposing (getLoginUrl, getIsAuthorized)
 
 import Http exposing (uriEncode)
-import Models exposing (Model)
+import Models exposing (Root)
 import String exposing (join)
 
 baseUrl : String
@@ -19,13 +19,13 @@ redirectUri : String
 redirectUri =
   "http://localhost:8090/static/oauth.html"
 
-getLoginUrl : Model -> String
+getLoginUrl : Root -> String
 getLoginUrl state =
   baseUrl ++ "scope=" ++ uriEncode (scope |> join " ") ++
   "&client_id=" ++ uriEncode state.config.oauth.clientId ++
   "&redirect_uri=" ++ uriEncode redirectUri ++
   "&response_type=token"
 
-getIsAuthorized : Model -> Bool
+getIsAuthorized : Root -> Bool
 getIsAuthorized state =
   state.oauth /= Nothing

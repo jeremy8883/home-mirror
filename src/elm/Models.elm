@@ -2,16 +2,16 @@ module Models exposing (..)
 
 import Time exposing (Time)
 
-type alias Model =
-  { config: ConfigModel
-  , clock: ClockModel
-  , weather: WeatherModel
-  , calendar: CalendarModel
-  , oauth: Maybe OauthModel
-  , user: UserModel
+type alias Root =
+  { config: Config
+  , clock: Clock
+  , weather: Weather
+  , calendar: Calendar
+  , oauth: Maybe Oauth
+  , user: User
   }
 
-type alias ConfigModel =
+type alias Config =
   { weather:
     { darkSkyApiKey: String
     , longitude: Float
@@ -21,33 +21,33 @@ type alias ConfigModel =
   , calendar: { name: String }
   }
 
-type alias ClockModel = Time
+type alias Clock = Time
 
 type FetchStatus
   = Fetching
   | Succeeded
   | Failed
 
-type alias WeatherModel =
+type alias Weather =
   { status: FetchStatus
-  , details: Maybe WeatherDetailsModel
+  , details: Maybe WeatherDetails
   }
 
-type alias WeatherDetailsModel =
+type alias WeatherDetails =
   { temperature: Float }
 
-type alias OauthModel =
+type alias Oauth =
   { accessToken: String
   , tokenType: String
   , expiresIn: String
   }
 
-type alias CalendarModel =
+type alias Calendar =
   { status: FetchStatus
-  , details: Maybe CalendarDetailsModel
+  , details: Maybe CalendarDetails
   }
 
-type alias CalendarDetailsModel =
+type alias CalendarDetails =
   { updated: String
   , summary: String
   }
@@ -59,14 +59,14 @@ type alias CalendarDetailsModel =
 --  , description: String
 --  }
 
-type alias UserModel =
+type alias User =
   { status: FetchStatus
-  , details: Maybe UserDetailsModel
+  , details: Maybe UserDetails
   }
 
-type alias UserDetailsModel =
+type alias UserDetails =
   { name: String
   , email: String
   }
 
-type alias LogoutResponseModel = { success: Bool }
+type alias LogoutResponse = { success: Bool }

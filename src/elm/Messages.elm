@@ -1,21 +1,21 @@
 module Messages exposing (Message(..))
 
 import Http
-import Models exposing (CalendarDetailsModel, LogoutResponseModel, UserDetailsModel, WeatherDetailsModel)
+import Models exposing (CalendarDetails, LogoutResponse, UserDetails, WeatherDetails)
 import Time exposing (Time)
 
 type Message
   = ClockTick Time
   | WeatherFetch Time
-  | WeatherFetchSucceed WeatherDetailsModel
+  | WeatherFetchSucceed WeatherDetails
   | WeatherFetchFail Http.Error
   | OauthFetchUserInfo
-  | OauthFetchUserInfoSucceed UserDetailsModel
+  | OauthFetchUserInfoSucceed UserDetails
   | OauthFetchUserInfoFail Http.Error
   | OauthLogout
-  | OauthLogoutSucceed LogoutResponseModel
+  | OauthLogoutSucceed LogoutResponse
   | OauthLogoutFail Http.Error
   | CalendarFetch Time
-  | CalendarFetchSucceed CalendarDetailsModel
+  | CalendarFetchSucceed CalendarDetails
   | CalendarFetchFail Http.Error
   | NoOp

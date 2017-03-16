@@ -2,10 +2,10 @@ module View.Weather exposing (weather)
 
 import Html exposing (Html, div, text)
 import Messages exposing (Message)
-import Models exposing (FetchStatus(Failed, Fetching, Succeeded), WeatherModel)
+import Models exposing (FetchStatus(Failed, Fetching, Succeeded), Weather)
 import Utils.Temperature exposing (fahrenheitToCelsius, toDegreesString)
 
-weather : WeatherModel -> Html Message
+weather : Weather -> Html Message
 weather model =
   case model.status of
     Fetching ->

@@ -5,10 +5,10 @@ import Api.Oauth exposing (fetchUserInfo, logout)
 import Api.Weather exposing (fetchWeather)
 import Date exposing (fromTime)
 import Messages exposing (Message(CalendarFetch, CalendarFetchFail, CalendarFetchSucceed, ClockTick, NoOp, OauthFetchUserInfo, OauthFetchUserInfoFail, OauthFetchUserInfoSucceed, OauthLogout, OauthLogoutFail, OauthLogoutSucceed, WeatherFetch, WeatherFetchFail, WeatherFetchSucceed))
-import Models exposing (FetchStatus(Failed, Fetching, Succeeded), Model)
+import Models exposing (FetchStatus(Failed, Fetching, Succeeded), Root)
 import Utils.LocalStorage as LocalStorage
 
-update : Message -> Model -> (Model, Cmd Message)
+update : Message -> Root -> (Root, Cmd Message)
 update message model =
   let
     weatherConfig = model.config.weather
