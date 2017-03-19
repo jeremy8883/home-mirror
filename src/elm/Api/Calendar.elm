@@ -1,10 +1,9 @@
 module Api.Calendar exposing(fetchCalendar)
 
 import Date exposing (Date)
-import Http exposing (defaultSettings, empty, uriEncode)
-import Messages exposing (Message(CalendarFetchFail, CalendarFetchSucceed))
-import Task
-import Json.Decode as Decode exposing (Decoder, (:=))
+import Http exposing (emptyBody, encodeUri, expectJson)
+import Messages exposing (Message(CalendarFetch))
+import Json.Decode exposing (field)
 import Models exposing (CalendarDetails)
 import Utils.Date exposing (dateToString)
 
@@ -12,20 +11,23 @@ fetchCalendar : String -> String -> String -> Date -> Cmd Message
 fetchCalendar clientId accessToken calendarName now =
   let
     request =
+      Http.request
       { url = "https://www.googleapis.com/calendar/v3/calendars/" ++
-          uriEncode calendarName ++
-          "/events?maxResults=50&timeMin=" ++ (uriEncode <| dateToString now) ++
-          "&key=" ++ uriEncode clientId
-      , headers = [("Authorization", "Bearer " ++ accessToken)]
-      , verb = "GET"
-      , body = empty
+          encodeUri calendarName ++
+          "/events?maxResults=50&timeMin=" ++ (encodeUri <| dateToString now) ++
+          "&key=" ++ encodeUri clientId
+      , headers = [Http.header "Authorization" ("Bearer " ++ accessToken)]
+      , method = "GET"
+      , body = emptyBody
+      , expect = expectJson decodeCalendar
+      , timeout = Nothing
+      , withCredentials = False
       }
   in
-    Http.fromJson decodeCalendar (Http.send defaultSettings request)
-    |> Task.perform CalendarFetchFail CalendarFetchSucceed
+    Http.send CalendarFetch request
 
-decodeCalendar : Decoder CalendarDetails
+decodeCalendar : Json.Decode.Decoder CalendarDetails
 decodeCalendar =
-  Decode.object2 CalendarDetails
-    (Decode.at [ "updated" ] Decode.string)
-    (Decode.at [ "summary" ] Decode.string)
+    Json.Decode.map2 CalendarDetails
+        (field "updated" Json.Decode.string)
+        (field "summary" Json.Decode.string)

@@ -1,10 +1,8 @@
-import Api.Calendar exposing (fetchCalendar)
 import Api.Weather exposing (fetchWeather)
 import Api.Oauth exposing (fetchUserInfo)
-import Date
-import Html.App
+import Html
 
-import Messages exposing (Message(CalendarFetch, ClockTick, NoOp, WeatherFetch))
+import Messages exposing (Message(CalendarRequired, ClockTick, NoOp, WeatherRequired))
 import Models exposing (Config, FetchStatus(Fetching), Root, Oauth)
 import Task
 import Time exposing (hour, minute, second)
@@ -13,7 +11,7 @@ import View exposing (view)
 import Utils.LocalStorage as LocalStorage
 
 main =
-  Html.App.programWithFlags
+  Html.programWithFlags
     { init = init
     , view = view
     , update = update
@@ -48,7 +46,7 @@ init config = (
       Cmd.batch
       [ fetchWeather config.weather.darkSkyApiKey config.weather.longitude config.weather.latitude
       , fetchUserInfo o.accessToken
-      , Task.perform (\_ -> NoOp) CalendarFetch Time.now
+      , Task.perform CalendarRequired Time.now
       ]
   )
 
@@ -56,6 +54,6 @@ subscriptions : Root -> Sub Message
 subscriptions model =
   Sub.batch
     [ Time.every second ClockTick
-    , Time.every (hour * 6) WeatherFetch
-    , Time.every (minute * 5) CalendarFetch
+    , Time.every (hour * 6) WeatherRequired
+    , Time.every (minute * 5) CalendarRequired
     ]

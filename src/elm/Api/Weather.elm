@@ -1,20 +1,20 @@
 module Api.Weather exposing(fetchWeather)
 
 import Http
-import Messages exposing (Message(WeatherFetchFail, WeatherFetchSucceed))
+import Messages exposing (Message(WeatherFetch, WeatherFetch))
 import Models exposing (WeatherDetails, Weather)
-import Task
-import Json.Decode as Decode exposing (Decoder, (:=))
+import Json.Decode as Decode exposing (Decoder)
 
 fetchWeather : String -> Float -> Float -> Cmd Message
 fetchWeather apiKey longitude latitude =
   let
     url = "/api/weather/forecast/" ++ apiKey ++ "/" ++ toString(longitude) ++ "," ++ toString(latitude)
+    request = Http.get url decodeWeather
   in
-    Task.perform WeatherFetchFail WeatherFetchSucceed (Http.get decodeWeather url)
+    Http.send WeatherFetch request
 
 
 decodeWeather : Decoder WeatherDetails
 decodeWeather =
-  Decode.object1 WeatherDetails
+  Decode.map WeatherDetails
     (Decode.at [ "currently", "temperature" ] Decode.float)

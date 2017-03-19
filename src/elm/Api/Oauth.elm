@@ -1,33 +1,34 @@
 module Api.Oauth exposing(fetchUserInfo, logout)
 
-import Http exposing (uriEncode, empty)
-import Messages exposing (Message(OauthFetchUserInfoFail, OauthFetchUserInfoSucceed, OauthLogoutFail, OauthLogoutSucceed))
-import Task
-import Json.Decode as Decode exposing (Decoder, (:=))
+import Http exposing (emptyBody, encodeUri)
+import Json.Decode exposing (field)
+import Messages exposing (Message(OauthLogoutPost, OauthUserInfoFetch, OauthUserInfoRequired))
 import Models exposing (LogoutResponse, UserDetails)
 
 fetchUserInfo : String -> Cmd Message
 fetchUserInfo accessToken =
   let
-    url = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" ++ uriEncode accessToken
+    url = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" ++ encodeUri accessToken
+    request = Http.get url decodeUser
   in
-    Task.perform OauthFetchUserInfoFail OauthFetchUserInfoSucceed (Http.get decodeUser url)
+    Http.send OauthUserInfoFetch request
 
-decodeUser : Decoder UserDetails
+decodeUser : Json.Decode.Decoder UserDetails
 decodeUser =
-  Decode.object2 UserDetails
-    (Decode.at [ "name" ] Decode.string)
-    (Decode.at [ "email" ] Decode.string)
+  Json.Decode.map2 UserDetails
+    (field "name" Json.Decode.string)
+    (field "email" Json.Decode.string)
 
 
 logout : String -> Cmd Message
 logout accessToken =
   let
-    url = "httpshttps://accounts.google.com/o/oauth2/revoke?token=" ++ uriEncode accessToken
+    url = "httpshttps://accounts.google.com/o/oauth2/revoke?token=" ++ encodeUri accessToken
+    request = Http.post url emptyBody logoutDecoder
   in
-    Task.perform OauthLogoutFail OauthLogoutSucceed (Http.post logoutDecoder url empty)
+    Http.send OauthLogoutPost request
 
-logoutDecoder : Decoder LogoutResponse
+logoutDecoder : Json.Decode.Decoder LogoutResponse
 logoutDecoder =
-  Decode.object1 LogoutResponse
-    (Decode.at [ "success" ] Decode.bool)
+  Json.Decode.map LogoutResponse
+    (field "success" Json.Decode.bool)

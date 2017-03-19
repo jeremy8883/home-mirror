@@ -4,7 +4,7 @@ import Html exposing (Html, a, button, div, text)
 
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
-import Messages exposing (Message(OauthLogout))
+import Messages exposing (Message(OauthLogoutRequired))
 import Models exposing (Root, UserDetails)
 import Selectors.Oauth exposing (getIsAuthorized, getLoginUrl)
 
@@ -24,7 +24,7 @@ settingsChild model =
     Nothing ->
       a [ href model.loginUrl ] [ text "Log in" ]
     Just ud ->
-      button [onClick OauthLogout] [ text ("Log out of " ++ ud.name) ]
+      button [onClick OauthLogoutRequired] [ text ("Log out of " ++ ud.name) ]
 
 type alias ViewModel =
   { loginUrl: String

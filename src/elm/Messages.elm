@@ -6,16 +6,12 @@ import Time exposing (Time)
 
 type Message
   = ClockTick Time
-  | WeatherFetch Time
-  | WeatherFetchSucceed WeatherDetails
-  | WeatherFetchFail Http.Error
-  | OauthFetchUserInfo
-  | OauthFetchUserInfoSucceed UserDetails
-  | OauthFetchUserInfoFail Http.Error
-  | OauthLogout
-  | OauthLogoutSucceed LogoutResponse
-  | OauthLogoutFail Http.Error
-  | CalendarFetch Time
-  | CalendarFetchSucceed CalendarDetails
-  | CalendarFetchFail Http.Error
+  | WeatherRequired Time
+  | WeatherFetch (Result Http.Error WeatherDetails)
+  | OauthUserInfoRequired
+  | OauthUserInfoFetch (Result Http.Error UserDetails)
+  | OauthLogoutRequired
+  | OauthLogoutPost (Result Http.Error LogoutResponse)
+  | CalendarRequired Time
+  | CalendarFetch (Result Http.Error CalendarDetails)
   | NoOp

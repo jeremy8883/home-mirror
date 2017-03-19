@@ -1,6 +1,5 @@
 module Utils.Temperature exposing (fahrenheitToCelsius, toDegreesString)
 
-import String exposing (append)
 import Utils.Number exposing (toFixed)
 import Utils.String exposing (appendP)
 
