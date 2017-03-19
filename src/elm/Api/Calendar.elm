@@ -1,10 +1,11 @@
 module Api.Calendar exposing(fetchCalendar)
 
+import Api.CalendarDecoder exposing (decodeCalendar)
 import Date exposing (Date)
 import Http exposing (emptyBody, encodeUri, expectJson)
+import Json.Decode
+import Json.Decode.Pipeline
 import Messages exposing (Message(CalendarFetch))
-import Json.Decode exposing (field)
-import Models exposing (CalendarDetails)
 import Utils.Date exposing (dateToString)
 
 fetchCalendar : String -> String -> String -> Date -> Cmd Message
@@ -25,9 +26,3 @@ fetchCalendar clientId accessToken calendarName now =
       }
   in
     Http.send CalendarFetch request
-
-decodeCalendar : Json.Decode.Decoder CalendarDetails
-decodeCalendar =
-    Json.Decode.map2 CalendarDetails
-        (field "updated" Json.Decode.string)
-        (field "summary" Json.Decode.string)
