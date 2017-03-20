@@ -1,7 +1,8 @@
 module View.Calendar exposing (calendar)
 
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, h2, li, text, ul)
 
+import List exposing (map)
 import Messages exposing (Message)
 import Models exposing (CalendarDetails, Root)
 import Selectors.Oauth exposing (getIsAuthorized)
@@ -34,4 +35,13 @@ type alias ViewModel =
 
 calendarDetails : CalendarDetails -> Html Message
 calendarDetails calendar =
-  div [ ] [ text ("Yes, this is a calendar for " ++ calendar.summary) ]
+  let
+    items = calendar.items |> map (\item -> (li []
+      [ text item.summary
+      ]
+    ))
+  in
+    div []
+      [ h2 [] [ text ("Agenda for " ++ calendar.summary) ]
+      , ul [] items
+      ]

@@ -10,6 +10,7 @@ import Update exposing (update)
 import View exposing (view)
 import Utils.LocalStorage as LocalStorage
 
+main : Program Config Root Message
 main =
   Html.programWithFlags
     { init = init
